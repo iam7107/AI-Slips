@@ -1,0 +1,54 @@
+#Q1
+def college_bot(query):
+    if "name" in query:
+        return "I am College Bot, here to help you!"
+    elif "college" in query:
+        return "I am your virtual assistant in college."
+    elif "courses" in query:
+        return "I can help you with information about courses."
+    elif "teachers" in query:
+        return "I can provide details about your teachers."
+    elif "events" in query:
+        return "I can keep you updated on upcoming events in college."
+    else:
+        return "I'm not sure how to respond. Ask me about your college!"
+
+if __name__ == "__main__":
+    print("College Bot: Hello! How can I assist you in college?")
+    while True:
+        user_query = input("You: ")
+        if user_query.lower() == "exit":
+            print("College Bot: Goodbye!")
+            break
+        response = college_bot(user_query.lower())
+        print("College Bot:", response)
+
+
+
+
+
+#Q2
+import math
+
+def minimax(curDepth, nodeIndex, maxTurn, scores, targetDepth):
+    if curDepth == targetDepth:
+        return scores[nodeIndex]
+
+    if maxTurn:
+        return max(
+            minimax(curDepth + 1, nodeIndex * 2, False, scores, targetDepth),
+            minimax(curDepth + 1, nodeIndex * 2 + 1, False, scores, targetDepth)
+        )
+    else:
+        return min(
+            minimax(curDepth + 1, nodeIndex * 2, True, scores, targetDepth),
+            minimax(curDepth + 1, nodeIndex * 2 + 1, True, scores, targetDepth)
+        )
+
+scores = [3, 5, 2, 9, 12, 5, 23, 23]
+treeDepth = math.log(len(scores), 2)
+print("The optimal value is: ", end="")
+print(minimax(0, 0, True, scores, treeDepth))
+
+
+

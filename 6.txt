@@ -1,0 +1,78 @@
+#Q1
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+def remove_stopwords_from_file(file_path):
+    with open(file_path, 'r') as file:
+        text = file.read()
+
+    words = word_tokenize(text)
+    
+    stop_words = set(stopwords.words('english'))
+    
+    filtered_words = [word for word in words if word.lower() not in stop_words]
+    
+    cleaned_text = " ".join(filtered_words)
+ 
+    print("Cleaned Text (without stopwords):")
+    print(cleaned_text)
+    
+    return cleaned_text
+
+
+file_path = '' 
+cleaned_text = remove_stopwords_from_file(file_path)
+
+
+
+#Q2
+from collections import deque
+
+def bfs(graph, start, goal):
+    queue = deque([start])
+ 
+    visited = set([start])
+    
+    parent = {start: None}
+    
+    while queue:
+        current_node = queue.popleft()
+        print(f"Visiting node: {current_node}")
+    
+        if current_node == goal:
+            path = []
+            while current_node is not None:
+                path.append(current_node)
+                current_node = parent[current_node]
+            return path[::-1] 
+    
+        for neighbor in graph[current_node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+                parent[neighbor] = current_node
+    
+    return None  
+graph = {
+    1: [2, 3, 4],
+    2: [1, 4, 5],
+    3: [1, 4],
+    4: [2, 3, 1, 7],
+    5: [2, 6, 7],
+    6: [5, 7],
+    7: [6, 5, 4]
+}
+
+start_node = 1 
+goal_node = 8
+
+path = bfs(graph, start_node, goal_node)
+
+if path:
+    print(f"\nPath from {start_node} to {goal_node}: {' -> '.join(map(str, path))}")
+else:
+    print(f"\nGoal node {goal_node} not found.")

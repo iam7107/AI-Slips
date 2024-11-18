@@ -1,0 +1,69 @@
+#Q1
+import math
+
+def minimax(curDepth, nodeIndex, maxTurn, scores, targetDepth):
+    if curDepth == targetDepth:
+        return scores[nodeIndex]
+
+    if maxTurn:
+        return max(
+            minimax(curDepth + 1, nodeIndex * 2, False, scores, targetDepth),
+            minimax(curDepth + 1, nodeIndex * 2 + 1, False, scores, targetDepth)
+        )
+    else:
+        return min(
+            minimax(curDepth + 1, nodeIndex * 2, True, scores, targetDepth),
+            minimax(curDepth + 1, nodeIndex * 2 + 1, True, scores, targetDepth)
+        )
+
+scores = [3, 5, 2, 9, 12, 5, 23, 23]
+treeDepth = math.log(len(scores), 2)
+print("The optimal value is: ", end="")
+print(minimax(0, 0, True, scores, treeDepth))
+
+
+
+
+
+
+#Q2
+def print_board(board):
+    for row in board:
+        print(" ".join('Q' if cell else '.' for cell in row))
+    print("\n")
+
+def is_safe(board, row, col, n):
+   
+    for i in range(row):
+        if board[i][col]:
+            return False
+
+    for i, j in zip(range(row-1, -1, -1), range(col-1, -1, -1)):
+        if board[i][j]:
+            return False
+    
+    for i, j in zip(range(row-1, -1, -1), range(col+1, n)):
+        if board[i][j]:
+            return False
+    
+    return True
+
+def solve_n_queens(board, row, n):
+    if row >= n:
+        print_board(board)
+        return True
+    for col in range(n):
+        if is_safe(board, row, col, n):
+            board[row][col] = True
+            if solve_n_queens(board, row + 1, n): 
+                return True
+            board[row][col] = False 
+
+    return False 
+def solve_8_queens(n=8):
+    board = [[False for _ in range(n)] for _ in range(n)] 
+    if not solve_n_queens(board, 0, n):
+        print("No solution exists")
+    else:
+        print("Solution found!")
+solve_8_queens()

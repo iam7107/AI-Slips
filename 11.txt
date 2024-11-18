@@ -1,0 +1,75 @@
+#Q1
+def means_end_analysis(string1, string2):
+  steps = 0
+
+  for i in range(len(string2)):
+   
+    if string2[i] not in string1:
+      steps += 1
+  return steps
+
+def main():
+  # Get the two strings from the user.
+  string1 = input("Enter the first string: ")
+  string2 = input("Enter the second string: ")
+
+  print(f"The number of steps required to transform the first string into the second string is {means_end_analysis(string1, string2)}.")
+
+
+if __name__ == "__main__":
+  main()
+
+
+
+
+
+#Q2
+from collections import deque
+
+def bfs(capacity_4, capacity_3, target):
+    visited = set()
+    queue = deque([(0, 0)]) 
+    parent = {}
+    
+    while queue:
+        current_4, current_3 = queue.popleft()
+
+        if current_3 == target:
+            path = []
+            while (current_4, current_3) != (0, 0):
+                path.append((current_4, current_3))
+                current_4, current_3 = parent[(current_4, current_3)]
+            path.append((0, 0))
+            path.reverse()
+            return path
+        
+        if (current_4, current_3) in visited:
+            continue
+        
+        visited.add((current_4, current_3))
+       
+        actions = [
+            (capacity_4, current_3), 
+            (current_4, capacity_3), 
+            (0, current_3),          
+            (current_4, 0),          
+            (current_4 - min(current_4, capacity_3 - current_3), current_3 + min(current_4, capacity_3 - current_3)),  
+            (current_4 + min(current_3, capacity_4 - current_4), current_3 - min(current_3, capacity_4 - current_4))  
+        ]
+        
+        for state in actions:
+            if state not in visited:
+                queue.append(state)
+                parent[state] = (current_4, current_3)
+    
+    return [] 
+
+capacity_4, capacity_3, target = 4, 3, 2
+solution = bfs(capacity_4, capacity_3, target)
+
+if solution:
+    print("Steps to achieve 2 gallons in the 3-gallon jug:")
+    for state in solution:
+        print(f"4-gallon jug: {state[0]}, 3-gallon jug: {state[1]}")
+else:
+    print("No solution found.")

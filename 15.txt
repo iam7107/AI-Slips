@@ -1,0 +1,104 @@
+#Q1
+def display_room(room):
+    for row in room:
+        print(" | ".join(row))
+        print("-" * 15)
+
+def move_monkey(room, direction, monkey_position):
+    row, col = monkey_position
+
+    if direction == "up" and row > 0:
+        room[row][col], room[row - 1][col] = room[row - 1][col], room[row][col]
+        return row - 1, col
+    elif direction == "down" and row < len(room) - 1:
+        room[row][col], room[row + 1][col] = room[row + 1][col], room[row][col]
+        return row + 1, col
+    elif direction == "left" and col > 0:
+        room[row][col], room[row][col - 1] = room[row][col - 1], room[row][col]
+        return row, col - 1
+    elif direction == "right" and col < len(room[0]) - 1:
+        room[row][col], room[row][col + 1] = room[row][col + 1], room[row][col]
+        return row, col + 1
+    else:
+        print("Invalid move. Try again.")
+        return row, col
+
+def monkey_banana_problem():
+    room = [
+        [" ", " ", " ", " ", "B"],
+        [" ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " "],
+        ["M", " ", " ", " ", " "]
+    ]
+
+    monkey_position = (3, 0)
+
+    print("Monkey Banana Problem:")
+    display_room(room)
+
+    while room[0][-1] != "M":
+        direction = input("Enter move direction (up/down/left/right): ").lower()
+        monkey_position = move_monkey(room, direction, monkey_position)
+        display_room(room)
+
+    print("Congratulations! The monkey reached the bananas.")
+
+if __name__ == "__main__":
+    monkey_banana_problem()
+
+
+
+
+#Q2
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F', 'G'],
+    'D': ['H', 'I'],
+    'E': [],
+    'F': ['K'],
+    'G': [],
+    'H': [],
+    'I': [],
+    'K': []
+}
+
+def depth_limited_dfs(node, goal, depth_limit, visited):
+    """Perform Depth-Limited DFS (DLDFS) from a given node."""
+    if depth_limit == 0:
+        if node == goal:
+            return [node]
+        return None
+    
+    visited.add(node)
+    
+    for neighbor in graph.get(node, []):
+        if neighbor not in visited:
+            path = depth_limited_dfs(neighbor, goal, depth_limit - 1, visited)
+            if path:
+                return [node] + path
+    
+    visited.remove(node)
+    return None
+
+def iterative_deepening_dfs(start, goal):
+    """Iterative Deepening DFS (IDDFS) to find the goal node."""
+    depth_limit = 0
+    while True:
+        visited = set()
+        print(f"Trying depth limit: {depth_limit}")
+        result = depth_limited_dfs(start, goal, depth_limit, visited)
+        if result:
+            return result
+        depth_limit += 1 
+
+start_node = 'A'
+goal_node = 'G'
+
+path = iterative_deepening_dfs(start_node, goal_node)
+
+if path:
+    print(f"Goal node '{goal_node}' found! Path: {' -> '.join(path)}")
+else:
+    print(f"Goal node '{goal_node}' not found.")
+

@@ -1,0 +1,37 @@
+#Q1
+import re
+
+def remove_punctuation(input_string):
+    return re.sub(r'[^\w\s]', '', input_string)
+
+input_string = input("Enter a string: ")
+
+clean_string = remove_punctuation(input_string)
+
+print("String without punctuation:", clean_string)
+
+
+
+
+
+#Q2
+from itertools import permutations
+
+def solve_cryptarithmetic():
+    letters = ['G', 'O', 'T', 'U']
+    
+    for perm in permutations(range(10), 4):
+        G, O, T, U = perm
+        
+        go = 10 * G + O
+        to = 10 * T + O
+        out = 100 * O + 10 * U + T
+        
+        if go + to == out:
+            print(f"Solution found: G = {G}, O = {O}, T = {T}, U = {U}")
+            print(f"GO = {go}, TO = {to}, OUT = {out}")
+            return
+    
+    print("No solution found")
+solve_cryptarithmetic()
+

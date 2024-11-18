@@ -1,0 +1,48 @@
+#Q1
+import calendar
+
+def generate_calendar(year, month):
+    print(calendar.month(year, month))
+
+year = int(input("Enter the year: "))
+month = int(input("Enter the month: "))
+generate_calendar(year, month)
+
+
+
+#Q2
+
+def dfs(graph, start, goal, visited=None):
+    if visited is None:
+        visited = set()  
+    
+ 
+    visited.add(start)
+    print(f"Visiting node: {start}") 
+    
+    if start == goal:
+        print(f"Goal node {goal} found!")
+        return True
+    
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            if dfs(graph, neighbor, goal, visited):
+                return True 
+    
+    return False
+
+graph = {
+    1: [2, 3],
+    2: [4],
+    3: [2],
+    4: [5, 6],
+    5: [7],
+    6: [],
+    7: [6] 
+}
+
+start_node = 1
+goal_node = 7
+
+if not dfs(graph, start_node, goal_node):
+    print(f"Goal node {goal_node} not found.")

@@ -1,0 +1,100 @@
+#Q1
+import nltk
+from nltk.corpus import wordnet
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+from nltk import pos_tag
+
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+
+def get_wordnet_pos(treebank_tag):
+    if treebank_tag.startswith('J'):
+        return wordnet.ADJ
+    elif treebank_tag.startswith('V'):
+        return wordnet.VERB 
+    elif treebank_tag.startswith('N'):
+        return wordnet.NOUN 
+    elif treebank_tag.startswith('R'):
+        return wordnet.ADV 
+    else:
+        return wordnet.NOUN 
+
+def lemmatize_sentence(sentence):
+    words = word_tokenize(sentence)
+    
+    pos_tags = pos_tag(words)
+    
+    lemmatizer = WordNetLemmatizer()
+    
+    lemmatized_words = []
+    
+    for word, tag in pos_tags:
+
+        wordnet_pos = get_wordnet_pos(tag)
+        lemmatized_word = lemmatizer.lemmatize(word, wordnet_pos)
+        lemmatized_words.append(lemmatized_word)
+   
+    return " ".join(lemmatized_words)
+
+sentence = "The cats are playing and the dogs are running."
+lemmatized_sentence = lemmatize_sentence(sentence)
+
+print(f"Original Sentence: {sentence}")
+print(f"Lemmatized Sentence: {lemmatized_sentence}")
+
+
+
+
+
+
+#Q2
+from collections import deque
+def bfs(graph, start, goal):
+   
+    queue = deque([start])
+    
+    visited = set([start])
+    
+    parent = {start: None}
+    
+    while queue:
+        current_node = queue.popleft()
+        print(f"Visiting node: {current_node}")
+        
+        if current_node == goal:
+            path = []
+            while current_node is not None:
+                path.append(current_node)
+                current_node = parent[current_node]
+            return path[::-1]
+        
+        for neighbor in graph[current_node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+                parent[neighbor] = current_node
+    
+    return None 
+
+graph = {
+    1: [2, 3],
+    2: [3],
+    3: [4, 5, 6],
+    4: [2],
+    5: [7, 8],
+    6: [8],
+    7: [8],
+    8: []
+}
+
+start_node = 1 
+goal_node = 8  
+
+path = bfs(graph, start_node, goal_node)
+
+if path:
+    print(f"\nPath from {start_node} to {goal_node}: {' -> '.join(map(str, path))}")
+else:
+    print(f"\nGoal node {goal_node} not found.")

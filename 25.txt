@@ -1,0 +1,92 @@
+#Q1
+def college_bot(query):
+    if "name" in query:
+        return "I am College Bot, here to help you!"
+    elif "college" in query:
+        return "I am your virtual assistant in college."
+    elif "courses" in query:
+        return "I can help you with information about courses."
+    elif "teachers" in query:
+        return "I can provide details about your teachers."
+    elif "events" in query:
+        return "I can keep you updated on upcoming events in college."
+    else:
+        return "I'm not sure how to respond. Ask me about your college!"
+
+if __name__ == "__main__":
+    print("College Bot: Hello! How can I assist you in college?")
+    while True:
+        user_query = input("You: ")
+        if user_query.lower() == "exit":
+            print("College Bot: Goodbye!")
+            break
+        response = college_bot(user_query.lower())
+        print("College Bot:", response)
+
+
+
+
+
+
+#Q2
+from collections import deque
+
+def is_goal(state, goal):
+    return state == goal
+
+def get_neighbors(state):
+    neighbors = []
+    row, col = state.index(0) // 3, state.index(0) % 3
+
+    moves = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    for move in moves:
+        new_row, new_col = row + move[0], col + move[1]
+        if 0 <= new_row < 3 and 0 <= new_col < 3:
+            neighbor = state[:]
+            neighbor[row * 3 + col], neighbor[new_row * 3 + new_col] = neighbor[new_row * 3 + new_col], neighbor[row * 3 + col]
+            neighbors.append(neighbor)
+
+    return neighbors
+
+def solve_8_puzzle(initial_state, goal_state):
+    visited = set()
+    queue = deque([(initial_state, [])])
+
+    while queue:
+        current_state, path = queue.popleft()
+
+        if tuple(current_state) in visited:
+            continue
+
+        visited.add(tuple(current_state))
+
+        if is_goal(current_state, goal_state):
+            return path
+
+        for neighbor in get_neighbors(current_state):
+            queue.append((neighbor, path + [neighbor]))
+
+    return None
+
+def print_board(board):
+    for i in range(0, len(board), 3):
+        print(" ".join(map(str, board[i:i+3])))
+
+if __name__ == "__main__":
+    print("Enter initial state (9 numbers separated by space):")
+    initial_state = list(map(int, input().split()))
+
+    print("Enter goal state (9 numbers separated by space):")
+    goal_state = list(map(int, input().split()))
+
+    solution = solve_8_puzzle(initial_state, goal_state)
+
+    if solution:
+        print("\nSolution:")
+        for step, state in enumerate(solution):
+            print(f"Step {step + 1}:")
+            print_board(state)
+            print()
+    else:
+        print("No solution found.")

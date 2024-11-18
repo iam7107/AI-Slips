@@ -1,0 +1,95 @@
+#Q1
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+def remove_stopwords_from_file(file_path):
+    with open(file_path, 'r') as file:
+        text = file.read()
+
+    words = word_tokenize(text)
+    
+    stop_words = set(stopwords.words('english'))
+    
+    filtered_words = [word for word in words if word.lower() not in stop_words]
+    
+    cleaned_text = " ".join(filtered_words)
+ 
+    print("Cleaned Text (without stopwords):")
+    print(cleaned_text)
+    
+    return cleaned_text
+
+
+file_path = '' 
+cleaned_text = remove_stopwords_from_file(file_path)
+
+
+
+
+
+
+
+#Q2
+import heapq
+
+class State:
+    def __init__(self, width, height, remaining_objects):
+        self.width = width
+        self.height = height
+        self.remaining_objects = remaining_objects
+
+    def __lt__(self, other):
+        return self.remaining_space() > other.remaining_space()
+
+    def is_goal(self):
+        return len(self.remaining_objects) == 0
+
+    def remaining_space(self):
+        return self.width * self.height
+
+def a_star(room_width, room_height, rectangular_objects, square_objects):
+    initial_state = State(room_width, room_height, rectangular_objects + square_objects)
+    open_set = []
+    heapq.heappush(open_set, initial_state)
+
+    while open_set:
+        current_state = heapq.heappop(open_set)
+
+        if current_state.is_goal():
+            return current_state
+
+        for obj in current_state.remaining_objects:
+
+            new_width = current_state.width - obj[0]
+            if new_width >= 0:
+                new_objects = [o for o in current_state.remaining_objects if o != obj]
+                new_state = State(new_width, current_state.height, new_objects)
+                heapq.heappush(open_set, new_state)
+
+            new_height = current_state.height - obj[1]
+            if new_height >= 0:
+                new_objects = [o for o in current_state.remaining_objects if o != obj]
+                new_state = State(current_state.width, new_height, new_objects)
+                heapq.heappush(open_set, new_state)
+
+    return None
+
+if __name__ == "__main__":
+    room_width = 10
+    room_height = 8
+
+    rectangular_objects = [(4, 2)] * 5
+    square_objects = [(2, 2)] * 4
+
+    result = a_star(room_width, room_height, rectangular_objects, square_objects)
+
+    if result:
+        print("Objects placement found:")
+        for i, obj in enumerate(result.remaining_objects):
+            print(f"Object {i + 1}: Width {obj[0]}, Height {obj[1]}")
+    else:
+        print("No valid placement found.")

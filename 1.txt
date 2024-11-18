@@ -1,0 +1,84 @@
+#Q1
+import random
+
+def f(x):
+    return -x**2 + 4*x
+
+# Hill Climbing algorithm
+def hill_climbing(func, start_point, step_size=0.1, max_iterations=1000):
+    current_point = start_point
+    current_value = func(current_point)
+
+    for iteration in range(max_iterations):
+      
+        neighbor_left = current_point - step_size
+        neighbor_right = current_point + step_size
+        
+        value_left = func(neighbor_left)
+        value_right = func(neighbor_right)
+        
+        if value_left > current_value:
+            current_point = neighbor_left
+            current_value = value_left
+        elif value_right > current_value:
+            current_point = neighbor_right
+            current_value = value_right
+        else:
+         
+            break
+    
+    return current_point, current_value
+
+ 
+    start_point = random.uniform(0, 5)
+    print(f"Starting point: {start_point}")
+
+   
+    max_point, max_value = hill_climbing(f, start_point)
+
+    print(f"Maximum point: {max_point}")
+    print(f"Maximum value: {max_value}")
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+#Q2
+def dfs(graph, start, goal, visited=None):
+    if visited is None:
+        visited = set()
+    
+    visited.add(start)
+    print(f"Visiting node: {start}") 
+    
+    if start == goal:
+        print(f"Goal node {goal} found!")
+        return True
+    
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            if dfs(graph, neighbor, goal, visited):
+                return True 
+    
+    return False
+
+graph = {
+    1: [2, 3],
+    2: [4, 5],
+    3: [6, 7],
+    4: [8],
+    5: [8],
+    6: [8],
+    7: [8],
+    8: [] 
+}
+
+
+start_node = 1
+goal_node = 8
+
+if not dfs(graph, start_node, goal_node):
+    print(f"Goal node {goal_node} not found.")
+

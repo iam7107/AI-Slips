@@ -1,0 +1,60 @@
+#Q1
+def sort_sentence_alphabetically(sentence):
+    words = sentence.split()
+
+    sorted_words = sorted(words)
+
+    sorted_sentence = ' '.join(sorted_words)
+
+    return sorted_sentence
+
+input_sentence = input("Enter a sentence: ")
+
+result = sort_sentence_alphabetically(input_sentence)
+
+print("Sorted Sentence:", result)
+
+
+
+
+
+#Q2
+from itertools import permutations
+def is_valid(assignment):
+    C = assignment['C']
+    R = assignment['R']
+    O = assignment['O']
+    S = assignment['S']
+    D = assignment['D']
+    A = assignment['A']
+    N = assignment['N']
+    G = assignment['G']
+    E = assignment['E']
+    
+    CROSS = C * 10000 + R * 1000 + O * 100 + S * 10 + S
+    ROADS = R * 10000 + O * 1000 + A * 100 + D * 10 + S
+    DANGER = D * 100000 + A * 10000 + N * 1000 + G * 100 + E * 10 + R
+    
+    return CROSS + ROADS == DANGER
+
+def solve_cryptarithmetic():
+    letters = 'CROSSROADSANGER'
+    unique_letters = set(letters) 
+    digits = range(10)
+   
+    for perm in permutations(digits, len(unique_letters)):
+        assignment = dict(zip(unique_letters, perm))
+         
+        if assignment['C'] == 0 or assignment['R'] == 0 or assignment['D'] == 0:
+            continue
+        
+        if is_valid(assignment):
+            print(f"Solution found: {assignment}")
+            return assignment
+    
+    print("No solution found")
+    return None
+
+solve_cryptarithmetic()
+
+

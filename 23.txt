@@ -1,0 +1,59 @@
+#Q1
+def tower_of_hanoi(n, source, auxiliary, destination):
+    if n == 1:
+        print(f"Move disk 1 from {source} to {destination}")
+        return
+
+    tower_of_hanoi(n-1, source, destination, auxiliary)
+
+    print(f"Move disk {n} from {source} to {destination}")
+
+    tower_of_hanoi(n-1, auxiliary, source, destination)
+
+def main():
+    n = int(input("Enter the number of disks: "))
+
+    print("The moves are:")
+    tower_of_hanoi(n, 'A', 'B', 'C') 
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+#Q2
+import itertools
+
+def solve_cryptarithmetic():
+    letters = 'SENDMOREY'
+    digits = range(10)
+
+    for perm in itertools.permutations(digits, len(letters)):
+        letter_to_digit = dict(zip(letters, perm))
+
+        S = letter_to_digit['S']
+        E = letter_to_digit['E']
+        N = letter_to_digit['N']
+        D = letter_to_digit['D']
+        M = letter_to_digit['M']
+        O = letter_to_digit['O']
+        R = letter_to_digit['R']
+        Y = letter_to_digit['Y']
+
+        if S == 0 or M == 0:
+            continue
+        send = 1000 * S + 100 * E + 10 * N + D
+        more = 1000 * M + 100 * O + 10 * R + E
+        money = 10000 * M + 1000 * O + 100 * N + 10 * E + Y
+        
+        if send + more == money:
+            print(f"SEND: {send}, MORE: {more}, MONEY: {money}")
+            print(f"Solution: S={S}, E={E}, N={N}, D={D}, M={M}, O={O}, R={R}, Y={Y}")
+            return
+
+    print("No solution found")
+solve_cryptarithmetic()

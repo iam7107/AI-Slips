@@ -1,0 +1,104 @@
+#Q1
+import random
+word_list = ['python', 'computer', 'science', 'algorithm', 'function']
+
+def display_word(word, guessed_letters):
+    display = ""
+    for letter in word:
+        if letter in guessed_letters:
+            display += letter
+        else:
+            display += "_"
+    return display
+def hangman_game():
+    word = random.choice(word_list)
+    guessed_letters = [] 
+    wrong_guesses = 0 
+    max_wrong_guesses = 6 
+    
+    print("Welcome to Hangman!")
+
+    while wrong_guesses < max_wrong_guesses:
+        print(f"\nWord: {display_word(word, guessed_letters)}")
+        print(f"Wrong guesses left: {max_wrong_guesses - wrong_guesses}")
+        
+        guess = input("Enter a letter: ").lower()
+        
+        if len(guess) != 1 or not guess.isalpha():
+            print("Please enter a valid single letter.")
+            continue
+        
+        if guess in guessed_letters:
+            print("You already guessed that letter!")
+            continue
+        
+        guessed_letters.append(guess)
+        
+        if guess in word:
+            print(f"Good guess! {guess} is in the word.")
+        else:
+            print(f"Sorry! {guess} is not in the word.")
+            wrong_guesses += 1
+        
+        if all(letter in guessed_letters for letter in word):
+            print(f"\nCongratulations! You guessed the word '{word}' correctly!")
+            break
+    else:
+        print(f"\nGame over! The word was '{word}'.")
+        
+if __name__ == "__main__":
+    hangman_game()
+
+
+
+
+
+#Q2
+from collections import deque
+def bfs(graph, start, goal):
+
+    queue = deque([start])
+    
+    visited = set()
+    
+    parent = {start: None}
+
+    while queue:
+        current_node = queue.popleft()
+        print(f"Visiting node: {current_node}")
+        
+        if current_node == goal:
+            path = []
+            while current_node is not None:
+                path.append(current_node)
+                current_node = parent[current_node]
+            return path[::-1] 
+    
+        for neighbor in graph[current_node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+                parent[neighbor] = current_node
+    
+    return None 
+
+graph = {
+    1: [2, 3],
+    2: [4, 5],
+    3: [6, 7],
+    4: [8],
+    5: [8],
+    6: [8],
+    7: [8],
+    8: []
+}
+
+start_node = 1  
+goal_node = 8 
+
+path = bfs(graph, start_node, goal_node)
+
+if path:
+    print(f"\nPath from {start_node} to {goal_node}: {' -> '.join(map(str, path))}")
+else:
+    print(f"\nGoal node {goal_node} not found.")

@@ -1,0 +1,54 @@
+#Q1
+import itertools
+
+def solve_cryptarithmetic():
+    letters = ['T', 'W', 'O', 'F', 'U', 'R']
+    for perm in itertools.permutations(range(10), len(letters)):
+    
+        letter_to_digit = dict(zip(letters, perm))
+        
+        TWO = letter_to_digit['T'] * 100 + letter_to_digit['W'] * 10 + letter_to_digit['O']
+        FOUR = letter_to_digit['F'] * 1000 + letter_to_digit['O'] * 100 + letter_to_digit['U'] * 10 + letter_to_digit['R']
+        
+        if TWO + TWO == FOUR:
+            print(f"Solution found: ")
+            print(f"TWO = {TWO}, FOUR = {FOUR}")
+            print(f"Letter to digit mapping: {letter_to_digit}")
+            return
+        
+    print("No solution found.")
+solve_cryptarithmetic()
+
+
+
+
+
+#Q2
+import random
+import time
+
+responses = {
+    "hello": ["Hi!", "Hello!", "Hey there!", "Hi, how can I help you?"],
+    "how are you": ["I'm doing great, thank you!", "I'm good", "I'm doing fine, how can I assist you today?"],
+    "what is your name":["i am bot "],
+    "bye": ["Goodbye!", "See you later!", "Bye! Have a great day!"],
+    "default": ["I'm sorry, I don't understand that.", "Could you please rephrase?", "I didn't catch that."]
+}
+
+def chatbot():
+    print("Hello! I'm your chatbot.")
+    
+    while True:
+        user_input = input("You: ").lower()
+        
+        if "bye" in user_input:
+            print("Bot: " + random.choice(responses["bye"]))
+            break
+        for key in responses:
+            if key in user_input:
+                print("Bot: " + random.choice(responses[key]))
+                break
+        else:
+            print("Bot: " + random.choice(responses["default"]))
+chatbot()
+
